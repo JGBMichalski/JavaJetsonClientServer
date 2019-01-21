@@ -33,7 +33,7 @@ public class main extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        MoveButton2.setText("500");
+        MoveButton2.setText("Y: +500");
         MoveButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MoveButton2ActionPerformed(evt);
@@ -47,14 +47,14 @@ public class main extends javax.swing.JFrame {
             }
         });
 
-        MoveButton1.setText("100");
+        MoveButton1.setText("X: +100");
         MoveButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MoveButton1ActionPerformed(evt);
             }
         });
 
-        MoveButton3.setText("1000");
+        MoveButton3.setText("X: -900");
         MoveButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MoveButton3ActionPerformed(evt);
@@ -94,30 +94,27 @@ public class main extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(HelpButton)))
+                            .addComponent(HelpButton, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 51, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(66, 66, 66)
-                                .addComponent(MoveButton1)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(Label1)
+                                .addGap(51, 51, 51))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(ArduinoConnect)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(MoveButton2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(MoveButton3)
-                                .addContainerGap())
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(Label1)
-                                    .addGap(51, 51, 51))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(ArduinoConnect)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(ArduinoDisconnect)
-                                    .addGap(39, 39, 39)))))))
+                                .addComponent(ArduinoDisconnect)
+                                .addGap(39, 39, 39))))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(MoveButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(MoveButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(MoveButton3)
+                .addGap(94, 94, 94))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -160,10 +157,10 @@ public class main extends javax.swing.JFrame {
     
     private void MoveButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoveButton2ActionPerformed
         try{
-            JetsonServer.send("500");
-            display("Moved 500.");
+            JetsonServer.send("y+500");
+            display("Moved Y 500.");
         } catch (IOException e) {
-            display("Could not send '500' to Arduino.");
+            display("Could not send 'y+500' to Arduino.");
         }
     }//GEN-LAST:event_MoveButton2ActionPerformed
 
@@ -173,19 +170,19 @@ public class main extends javax.swing.JFrame {
 
     private void MoveButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoveButton3ActionPerformed
         try{
-            JetsonServer.send("1000");
-            display("Moved 1000.");
+            JetsonServer.send("x-900");
+            display("Moved X -900.");
         } catch (IOException e) {
-            display("Could not send '1000' to Arduino.");
+            display("Could not send 'x-900' to Arduino.");
         }
     }//GEN-LAST:event_MoveButton3ActionPerformed
 
     private void MoveButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoveButton1ActionPerformed
         try{
-            JetsonServer.send("100");
-            display("Moved 100.");
+            JetsonServer.send("x+100");
+            display("Moved X 100.");
         } catch (IOException e) {
-            display("Could not send '100' to Arduino.");
+            display("Could not send 'x+100' to Arduino.");
         }
     }//GEN-LAST:event_MoveButton1ActionPerformed
 

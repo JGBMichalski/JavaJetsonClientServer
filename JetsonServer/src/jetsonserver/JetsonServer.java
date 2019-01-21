@@ -9,7 +9,7 @@ public class JetsonServer {
      static BufferedReader in = null;
 
     public static void send(String x) throws IOException {
-        out.println(x);
+        out.println(x + ";");
     }
     
     public static boolean connect(){
