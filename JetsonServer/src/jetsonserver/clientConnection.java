@@ -136,13 +136,13 @@ public class clientConnection{
             execLinCmd(deton1);
             try{
                 gui.display("Sleeping for 10 seconds to allow YOLO to boot...");
-                out.println("Sleeping for 10 seconds to allow YOLO to boot...");
+                //out.println("Sleeping for 10 seconds to allow YOLO to boot...");
                 TimeUnit.SECONDS.sleep(10);
                 gui.display("Wait completed.");
-                out.println("Wait completed.");
+                //out.println("Wait completed.");
             } catch (Exception e){
                 gui.display("Error during sleep.");
-                out.println("Error during sleep.");
+                //out.println("Error during sleep.");
             }
             //execLinCmd(deton2);
         } else if (x.equals("detoff")){
