@@ -23,6 +23,7 @@ public class clientConnection{
         server = new clientConnection();
         gui = new gui(server);
         gui.setVisible(true);
+        JetsonServer.connect();
         server.start(8080);
         while (isConnected = true){
             cmd = server.listen();
