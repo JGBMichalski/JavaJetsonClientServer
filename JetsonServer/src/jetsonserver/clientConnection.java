@@ -95,36 +95,36 @@ public class clientConnection{
             try {
                 JetsonServer.send(x);
                 gui.display("Passed '" + x + "' to Arduino.");
-                out.println("Passed '" + x + "' to Arduino.");
+                //out.println("Passed '" + x + "' to Arduino.");
             } catch (Exception e){
                 gui.display("Failed to send command: " + x + " to Arduino.");
-                out.println("Failed to send command: " + x + " to Arduino.");
+                //out.println("Failed to send command: " + x + " to Arduino.");
                 System.exit(1);
             }
             } else if (x.equals("d")){
                 //Close connection to client.
-                out.println("Jetson will now disconnect...");
+                //out.println("Jetson will now disconnect...");
                 gui.display("Jetson will now disconnect...");
                 server.stop();
                 gui.display("Disconnected from web client.");
             } else if (x.equals("aqon")){
                 //Turn on Data Aquisition mode
-                out.println("Entering Aquisition mode...");
+                //out.println("Entering Aquisition mode...");
                 gui.display("Entering Aquisition mode...");
                 executeCMD(aqon);
             } else if (x.equals("aqoff")){
                 //Turn off Data Aquisition mode
-                out.println("Stopping Aquisition mode...");
+                //out.println("Stopping Aquisition mode...");
                 gui.display("Stopping Aquisition mode...");
                 executeCMD(aqoff);
             } else if (x.equals("deton")){
                 //Turn on Detection mode
-                out.println("Entering Detection mode...");
+                //out.println("Entering Detection mode...");
                 gui.display("Entering Detection mode...");
                 executeCMD(deton);
             } else if (x.equals("detoff")){
                 //Turn off Detection mode
-                out.println("Stopping Detection mode...");
+                //out.println("Stopping Detection mode...");
                 gui.display("Stopping Detection mode...");
                 executeCMD(detoff);
             } else if (x.equals("test")){
