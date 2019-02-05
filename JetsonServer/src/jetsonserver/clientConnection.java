@@ -17,7 +17,7 @@ public class clientConnection{
             + "rtph264pay ! udpsink host=140.193.207.255 port=5000 t. ! queue";
     private String aqoff = "";
     private String deton1 = "/home/nvidia/zed-yolo/zed_cpp_sample/build/darknet_zed /home/nvidia/zed-yolo/libdarknet/data/coco.names "
-            + "/home/nvidia/zed-yolo/libdarknet/cfg/yolov3-tiny.cfg /home/nvidia/zed-yolo/zed_cpp_sample/build/yolov3-tiny.weights";
+            + "/home/nvidia/zed-yolo/libdarknet/cfg/yolov3-tiny.cfg /home/nvidia/zed-yolo/libdarknet/yolov3-tiny.weights";
     private String deton2 = "gst-launch-1.0 ximagesrc xname=\"ZED\" use-damage=0 ! "
             + "video/x-raw ! timeoverlay ! queue ! videoconvert ! omxh264enc "
             + "control-rate=2 ! tee name=t ! queue ! video/x-h264, "
