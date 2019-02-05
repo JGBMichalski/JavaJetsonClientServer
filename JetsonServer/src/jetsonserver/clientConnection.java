@@ -182,7 +182,7 @@ public class clientConnection{
             
         }
         catch (Exception e) {
-            gui.display("Error");
+            gui.display("Error: " + e);
         }
     }
 }
