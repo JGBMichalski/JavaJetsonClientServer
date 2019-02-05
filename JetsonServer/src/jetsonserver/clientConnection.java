@@ -159,27 +159,7 @@ public class clientConnection{
         String s = null;
         
         try {
-            Process p = Runtime.getRuntime().exec(cmd);
-            
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
-            BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-
-            // read the output from the command
-            gui.display("Here is the standard output of the command:\n");
-            while ((s = stdInput.readLine()) != null) {
-                gui.display(s);
-            }
-            
-            // read any errors from the attempted command
-            gui.display("Here is the standard error of the command (if any):\n");
-            while ((s = stdError.readLine()) != null) {
-                gui.display(s);
-            }
-            
-            stdInput.close();
-            stdError.close();
-            
+            Process p = Runtime.getRuntime().exec(cmd);            
         }
         catch (Exception e) {
             gui.display("Error: " + e);
