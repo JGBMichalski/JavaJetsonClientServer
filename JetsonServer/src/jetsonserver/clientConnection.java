@@ -22,7 +22,7 @@ public class clientConnection{
             + "video/x-raw ! timeoverlay ! queue ! videoconvert ! omxh264enc "
             + "control-rate=2 ! tee name=t ! queue ! video/x-h264, "
             + "stream-format=byte-stream ! h264parse ! rtph264pay ! "
-            + "udpsink host=140.193.207.255 port=5000 t. ! "
+            + "udpsink host=140.193.230.117 port=5000 t. ! "
             + "queue ! mpegtsmux ! filesink location=both.mp4 -e";
     private String detoff= "";
 
@@ -144,7 +144,7 @@ public class clientConnection{
                 gui.display("Error during sleep.");
                 out.println("Error during sleep.");
             }
-            execLinCmd(deton2);
+            //execLinCmd(deton2);
         } else if (x.equals("detoff")){
             //Turn off Detection mode
             //out.println("Stopping Detection mode...");
