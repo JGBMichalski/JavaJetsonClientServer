@@ -16,7 +16,7 @@ public class clientConnection{
             + "queue ! video/x-h264, stream-format=byte-stream ! h264parse ! "
             + "rtph264pay ! udpsink host=140.193.207.255 port=5000 t. ! queue";
     private String aqoff = "";
-    private String deton1 = "./darknet_zed ../../libdarknet/data/coco.names "
+    private String deton1 = "cd zed-yolo/zed_cpp_sample/build | ./darknet_zed ../../libdarknet/data/coco.names "
             + "../../libdarknet/cfg/yolov3-tiny.cfg yolov3-tiny.weights";
     private String deton2 = "gst-launch-1.0 ximagesrc xname=\"ZED\" use-damage=0 ! "
             + "video/x-raw ! timeoverlay ! queue ! videoconvert ! omxh264enc "
