@@ -2,6 +2,7 @@ package jetsonserver;
 
 import java.io.*;
 import java.net.*;
+import java.util.concurrent.TimeUnit;
 
 public class clientConnection{
 
@@ -9,9 +10,20 @@ public class clientConnection{
     private Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
-    private String aqon = "";
+    private String aqon = "gst-launch-1.0 v4l2src device=/dev/video1 ! "
+            + "video/x-raw, width=3840, height=1080 ! videocrop top=0 left=0 "
+            + "right=1920 bottom=0 ! omxh264enc control-rate=2! tee name=t ! "
+            + "queue ! video/x-h264, stream-format=byte-stream ! h264parse ! "
+            + "rtph264pay ! udpsink host=140.193.207.255 port=5000 t. ! queue";
     private String aqoff = "";
-    private String deton = "";
+    private String deton1 = "./darknet_zed ../../libdarknet/data/coco.names "
+            + "../../libdarknet/cfg/yolov3-tiny.cfg yolov3-tiny.weights";
+    private String deton2 = "gst-launch-1.0 ximagesrc xname=\"ZED\" use-damage=0 ! "
+            + "video/x-raw ! timeoverlay ! queue ! videoconvert ! omxh264enc "
+            + "control-rate=2 ! tee name=t ! queue ! video/x-h264, "
+            + "stream-format=byte-stream ! h264parse ! rtph264pay ! "
+            + "udpsink host=140.193.207.255 port=5000 t. ! "
+            + "queue ! mpegtsmux ! filesink location=both.mp4 -e";
     private String detoff= "";
 
     static boolean isConnected = false;
@@ -101,34 +113,76 @@ public class clientConnection{
                 //out.println("Failed to send command: " + x + " to Arduino.");
                 System.exit(1);
             }
-            } else if (x.equals("d")){
-                //Close connection to client.
-                //out.println("Jetson will now disconnect...");
-                gui.display("Jetson will now disconnect...");
-                server.stop();
-                gui.display("Disconnected from web client.");
-            } else if (x.equals("aqon")){
-                //Turn on Data Aquisition mode
-                //out.println("Entering Aquisition mode...");
-                gui.display("Entering Aquisition mode...");
-                executeCMD(aqon);
-            } else if (x.equals("aqoff")){
-                //Turn off Data Aquisition mode
-                //out.println("Stopping Aquisition mode...");
-                gui.display("Stopping Aquisition mode...");
-                executeCMD(aqoff);
-            } else if (x.equals("deton")){
-                //Turn on Detection mode
-                //out.println("Entering Detection mode...");
-                gui.display("Entering Detection mode...");
-                executeCMD(deton);
-            } else if (x.equals("detoff")){
-                //Turn off Detection mode
-                //out.println("Stopping Detection mode...");
-                gui.display("Stopping Detection mode...");
-                executeCMD(detoff);
-            } else if (x.equals("test")){
-                gui.display("'test' has been entered.");
+        } else if (x.equals("d")){
+            //Close connection to client.
+            //out.println("Jetson will now disconnect...");
+            gui.display("Jetson will now disconnect...");
+            server.stop();
+            gui.display("Disconnected from web client.");
+        } else if (x.equals("aqon")){
+            //Turn on Data Aquisition mode
+            //out.println("Entering Aquisition mode...");
+            gui.display("Entering Aquisition mode...");
+            execLinCmd(aqon);
+        } else if (x.equals("aqoff")){
+            //Turn off Data Aquisition mode
+            //out.println("Stopping Aquisition mode...");
+            gui.display("Stopping Aquisition mode...");
+            execLinCmd(aqoff);
+        } else if (x.equals("deton")){
+            //Turn on Detection mode
+            //out.println("Entering Detection mode...");
+            gui.display("Entering Detection mode...");
+            execLinCmd(deton1);
+            try{
+                gui.display("Sleeping for 10 seconds to allow YOLO to boot...");
+                out.println("Sleeping for 10 seconds to allow YOLO to boot...");
+                TimeUnit.SECONDS.sleep(10);
+                gui.display("Wait completed.");
+                out.println("Wait completed.");
+            } catch (Exception e){
+                gui.display("Error during sleep.");
+                out.println("Error during sleep.");
             }
+            execLinCmd(deton2);
+        } else if (x.equals("detoff")){
+            //Turn off Detection mode
+            //out.println("Stopping Detection mode...");
+            gui.display("Stopping Detection mode...");
+            execLinCmd(detoff);
+        } else if (x.equals("test")){
+            gui.display("'test' has been entered.");
+        }
+    }
+    
+    private void execLinCmd(String cmd){
+        String s = null;
+        
+        try {
+            Process p = Runtime.getRuntime().exec(cmd);
+            
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+            BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+
+            // read the output from the command
+            gui.display("Here is the standard output of the command:\n");
+            while ((s = stdInput.readLine()) != null) {
+                gui.display(s);
+            }
+            
+            // read any errors from the attempted command
+            gui.display("Here is the standard error of the command (if any):\n");
+            while ((s = stdError.readLine()) != null) {
+                gui.display(s);
+            }
+            
+            stdInput.close();
+            stdError.close();
+            
+        }
+        catch (Exception e) {
+            gui.display("Error");
+        }
     }
 }
