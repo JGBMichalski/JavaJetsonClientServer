@@ -18,8 +18,10 @@ public class gui extends javax.swing.JFrame {
     static PrintStream response;
     static BufferedReader in;
     boolean isConneted = false;
+    clientConnection x;
 
-    public gui() {
+    public gui(clientConnection client) {
+        x = client;
         initComponents();
     }
     
@@ -32,6 +34,7 @@ public class gui extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         TextBox1 = new javax.swing.JTextArea();
         Label1 = new javax.swing.JLabel();
+        commandBar = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -47,8 +50,14 @@ public class gui extends javax.swing.JFrame {
         jScrollPane1.setViewportView(TextBox1);
 
         Label1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        Label1.setForeground(new java.awt.Color(0, 0, 0));
         Label1.setText("Arduino Mega Motor Control Client");
+
+        commandBar.setText("Enter Commands Here");
+        commandBar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                commandBarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -59,8 +68,11 @@ public class gui extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(HelpButton, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(jScrollPane1)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(commandBar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(HelpButton)))
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 58, Short.MAX_VALUE)
@@ -75,7 +87,9 @@ public class gui extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(HelpButton)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(HelpButton)
+                    .addComponent(commandBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -106,6 +120,14 @@ public class gui extends javax.swing.JFrame {
     private void HelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HelpButtonActionPerformed
         display("This is a User Interface designed to run on the NVidia Jetson. \n\nMake sure to have the Arduino Mega connected to the Jetson via\nEthernet. In addition, make sure the Ethernet Shield is connected and\nsecured to the Mega. \n\nThe buttons on the main interface currently work with only one motor\nconnected. For example, if you hit \"500\", the motor will move 500\nsteps. \n\nFurther development will be made by James.");
     }//GEN-LAST:event_HelpButtonActionPerformed
+
+    private void commandBarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_commandBarActionPerformed
+        try{
+            x.handleCmd(commandBar.getText());
+        } catch (Exception e){
+            display("Failed command: " + commandBar.getText());
+        }
+    }//GEN-LAST:event_commandBarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -149,6 +171,7 @@ public class gui extends javax.swing.JFrame {
     private javax.swing.JButton HelpButton;
     private javax.swing.JLabel Label1;
     private javax.swing.JTextArea TextBox1;
+    private javax.swing.JTextField commandBar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
