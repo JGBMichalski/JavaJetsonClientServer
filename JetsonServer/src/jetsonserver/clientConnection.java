@@ -24,7 +24,7 @@ public class clientConnection{
             + "stream-format=byte-stream ! h264parse ! rtph264pay ! "
             + "udpsink host=140.193.230.117 port=5000 t. ! "
             + "queue ! mpegtsmux ! filesink location=both.mp4 -e";
-    private String detoff= "";
+    private String detoff= "killall -9 /home/nvidia/zed-yolo/zed_cpp_sample/build/darknet_zed";
 
     static boolean isConnected = false;
     static String cmd = "";
