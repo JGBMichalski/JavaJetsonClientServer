@@ -9,9 +9,9 @@ public class JetsonServer implements Runnable {
      private PrintWriter out = null;
      private BufferedReader in = null;
      private boolean sentMode = false;
-     private gui gui;
+     private GUI gui;
      
-     public JetsonServer(gui x){
+     public JetsonServer(GUI x){
          gui = x;
      }
 

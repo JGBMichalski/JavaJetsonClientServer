@@ -7,7 +7,7 @@ import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class gui extends javax.swing.JFrame {
+public class GUI extends javax.swing.JFrame {
     
     static ServerSocket socket;
     static int port = 8080;
@@ -18,9 +18,9 @@ public class gui extends javax.swing.JFrame {
     static PrintStream response;
     static BufferedReader in;
     boolean isConneted = false;
-    clientConnection x;
+    ClientConnection x;
 
-    public gui(clientConnection client) {
+    public GUI(ClientConnection client) {
         x = client;
         initComponents();
     }
