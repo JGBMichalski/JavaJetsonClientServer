@@ -151,8 +151,9 @@ public class ClientConnection{
         	JT.setMode(true);
         } else if (x.equals("sentoff")){
         	JT.setMode(false);
-        }else {
-            gui.display("Invalid command: " + x);
+        }  else {
+            JT.setTime(Integer.parseInt(x));
+        	//gui.display("Invalid command: " + x);
         }
     }
     

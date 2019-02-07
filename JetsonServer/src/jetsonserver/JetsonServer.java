@@ -10,9 +10,11 @@ public class JetsonServer implements Runnable {
      private BufferedReader in = null;
      private boolean sentMode = false;
      private GUI gui;
+     private int delay;
      
      public JetsonServer(GUI x){
          gui = x;
+         delay = 3000;
      }
 
     public void send(String x) throws IOException {
@@ -47,10 +49,12 @@ public class JetsonServer implements Runnable {
             if (sentMode){
                 try{
                 	gui.display("Sentry Mode enabled.");
-                    send("x+999");
-                    Thread.sleep(15000);
+                    send("x+500");
+                    Thread.sleep(delay);
                     send("x-999");
-                    Thread.sleep(15000);
+                    Thread.sleep(delay);
+                    send("x+500");
+                    Thread.sleep(delay);
                 } catch (Exception e){}
             } else {
                 try{
@@ -63,5 +67,9 @@ public class JetsonServer implements Runnable {
     
     public void setMode(boolean x){
         sentMode = x;
+    }
+    
+    public void setTime(int x) {
+    	delay = x;
     }
 }
