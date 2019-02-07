@@ -55,7 +55,7 @@ public class JetsonServer implements Runnable {
             } else {
                 try{
                 	gui.display("Sentry Mode disabled.");
-                    Thread.sleep(1000);
+                    Thread.sleep(15000);
                 } catch (Exception e){}
             }
         }
