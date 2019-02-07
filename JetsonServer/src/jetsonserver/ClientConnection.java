@@ -147,7 +147,11 @@ public class ClientConnection{
             gui.display("Stopping Detection mode...");
             execLinCmd(detoff1);
             execLinCmd(detoff2);
-        } else {
+        } else if (x.equals("senton")){
+        	JT.setMode(true);
+        } else if (x.equals("sentoff")){
+        	JT.setMode(false);
+        }else {
             gui.display("Invalid command: " + x);
         }
     }
