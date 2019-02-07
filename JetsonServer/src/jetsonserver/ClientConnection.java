@@ -37,7 +37,7 @@ public class ClientConnection{
         JT = new JetsonServer(gui);
         Thread t = new Thread(JT);
         t.start();
-        //JT.connect();
+        JT.connect();
         
         // Initiate the server to connect to web client
         server.start(8080);
