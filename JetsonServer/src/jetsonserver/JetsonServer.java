@@ -46,6 +46,7 @@ public class JetsonServer implements Runnable {
         while (true){
             if (sentMode){
                 try{
+                	gui.display("Sentry Mode enabled.");
                     send("x+999");
                     Thread.sleep(15000);
                     send("x-999");
@@ -53,6 +54,7 @@ public class JetsonServer implements Runnable {
                 } catch (Exception e){}
             } else {
                 try{
+                	gui.display("Sentry Mode disabled.");
                     Thread.sleep(1000);
                 } catch (Exception e){}
             }
