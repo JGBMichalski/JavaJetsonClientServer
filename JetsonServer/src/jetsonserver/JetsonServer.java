@@ -2,7 +2,6 @@ package jetsonserver;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.concurrent.TimeUnit;
 
 public class JetsonServer implements Runnable {
      private Socket pingSocket = null;
@@ -58,8 +57,8 @@ public class JetsonServer implements Runnable {
                 } catch (Exception e){}
             } else {
                 try{
-                	gui.display("Sentry Mode disabled.");
-                    Thread.sleep(15000);
+                	//gui.display("Sentry Mode disabled.");
+                    Thread.sleep(1000);
                 } catch (Exception e){}
             }
         }

@@ -114,15 +114,15 @@ public class ClientConnection{
             server.stop();
             gui.display("Disconnected from web client.");
         } else if (x.equals("aqon")){
-            //Turn on Data Aquisition mode
-            //out.println("Entering Aquisition mode...");
-            gui.display("Entering Aquisition mode...");
+            //Turn on Data Acquisition mode
+            //out.println("Entering Acquisition mode...");
+            gui.display("Entering Acquisition mode...");
             execLinCmd(aqon);
             JT.setMode(true);
         } else if (x.equals("aqoff")){
-            //Turn off Data Aquisition mode
-            //out.println("Stopping Aquisition mode...");
-            gui.display("Stopping Aquisition mode...");
+            //Turn off Data Acquisition mode
+            //out.println("Stopping Acquisition mode...");
+            gui.display("Stopping Acquisition mode...");
             execLinCmd(aqoff);
             JT.setMode(false);
         } else if (x.equals("deton")){
@@ -140,7 +140,7 @@ public class ClientConnection{
                 gui.display("Error during sleep.");
                 //out.println("Error during sleep.");
             }
-            //execLinCmd(deton2);
+            execLinCmd(deton2);
         } else if (x.equals("detoff")){
             //Turn off Detection mode
             //out.println("Stopping Detection mode...");
@@ -152,12 +152,12 @@ public class ClientConnection{
         } else if (x.equals("sentoff")){
         	JT.setMode(false);
         }  else {
-            JT.setTime(Integer.parseInt(x));
-        	//gui.display("Invalid command: " + x);
+            //JT.setTime(Integer.parseInt(x));
+        	gui.display("Invalid command: " + x);
         }
     }
     
-    // Execute any linux command sent by the web server
+    // Execute any Linux command sent by the web server
     private void execLinCmd(String cmd){
         String s = null;
         
@@ -172,11 +172,11 @@ public class ClientConnection{
     // Load the variables for executing commands
     private void loadVariables(){
         // Launches Gstreamer and streams to browser on localhost
-        aqon = "gst-launch-1.0 v4l2src device=/dev/video1 ! "
-                    + "video/x-raw, width=3840, height=1080 ! videocrop top=0 left=0 "
-                    + "right=1920 bottom=0 ! omxh264enc control-rate=2! tee name=t ! "
-                    + "queue ! video/x-h264, stream-format=byte-stream ! h264parse ! "
-                    + "rtph264pay ! udpsink host=localhost port=5000 t. ! queue";
+        aqon = "gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw, width=3840,"
+        		+ " height=1080 ! videocrop top=0 left=0 right=1920 bottom=0 ! "
+        		+ "videoconvert ! videoscale ! video/x-raw,width=720,height=360 ! "
+        		+ "clockoverlay shaded-background=true font-desc=\"Sans 24\" ! "
+        		+ "theoraenc ! oggmux ! tcpserversink host=127.0.0.1 port=5000";
         // Kills Gstreamer process
         aqoff = "killall -9 gstreamer";
         // Launches YOLOv3
@@ -185,12 +185,10 @@ public class ClientConnection{
                     + "zed-yolo/libdarknet/cfg/yolov3-tiny.cfg /home/nvidia/zed-yolo/"
                     + "libdarknet/yolov3-tiny.weights";
         // Launches Gstreamer to stream YOLO to browser
-        deton2 = "gst-launch-1.0 ximagesrc xname=\"ZED\" use-damage=0 ! "
-                    + "video/x-raw ! timeoverlay ! queue ! videoconvert ! omxh264enc "
-                    + "control-rate=2 ! tee name=t ! queue ! video/x-h264, "
-                    + "stream-format=byte-stream ! h264parse ! rtph264pay ! "
-                    + "udpsink host=140.193.230.117 port=5000 t. ! "
-                    + "queue ! mpegtsmux ! filesink location=both.mp4 -e";
+        deton2 = "gst-launch-1.0  ximagesrc xname=\"ZED\" use-damage=0 ! videoconvert"
+        		+ " ! videoscale ! video/x-raw,width=720,height=360 ! clockoverlay "
+        		+ "shaded-background=true font-desc=\"Sans 24\" ! theoraenc ! oggmux"
+        		+ " ! tcpserversink host=127.0.0.1 port=5000";
         // Kills YOLOv3 process
         detoff1= "killall -9 /home/nvidia/zed-yolo/zed_cpp_sample/build/darknet_zed";
         // Kills Gstreamer process
