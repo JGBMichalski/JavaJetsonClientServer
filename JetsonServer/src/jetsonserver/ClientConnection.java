@@ -6,10 +6,17 @@ import java.util.concurrent.TimeUnit;
 
 public class ClientConnection{
 
-    private ServerSocket serverSocket;
-    private Socket clientSocket;
-    private PrintWriter out;
-    private BufferedReader in;
+    private DatagramSocket serverSocket; //ServerSocket type for TCP, DatagramPacket for UDP
+    private DatagramPacket receivePacket;
+    private InetAddress IPAddress;
+    private String sentence;
+    private DatagramPacket sendPacket ;
+    private int port;
+    private byte[] received;
+    private byte[] sent;
+    //private Socket clientSocket;
+    //private PrintWriter out;
+    //private BufferedReader in;
     static boolean isConnected = false;
     static String cmd = "";
     static GUI gui;
@@ -49,50 +56,64 @@ public class ClientConnection{
     }
 
     // Setup socket and wait for client
-    public Socket start(int port){
+    public void start(int port){
         try {
             gui.display("Setting up socket...");
-            serverSocket = new ServerSocket(port);
-            gui.display("Waiting for client...");
-            clientSocket = serverSocket.accept();
+            serverSocket = new DatagramSocket(port);// for TCP: new ServerSocket(port);
+            gui.display("Socket Setup...");
+            //clientSocket = serverSocket.accept();
             isConnected = true;
 
-            gui.display("Connected to client");
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
+            //gui.display("Connected to client");
+            //out = new PrintWriter(clientSocket.getOutputStream(), true);
         } catch (IOException e){
             gui.display("Could not setup socket. Please restart.");
         } 
-        return clientSocket;
+        //return clientSocket;
     }
 
     // Close all connections
     public void stop(){
-        try {
-            in.close();
-            out.close();
-            clientSocket.close();
+        //try {
+            //in.close();
+            //out.close();
+            //clientSocket.close();
             serverSocket.close();
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+        //} catch (IOException e){
+        //    e.printStackTrace();
+        //}
         gui.display("Server stopped.");
         isConnected = false;
     }
 
     //Listen for input from web client
     public String listen(){
-        String msg = new String();
         try {
-            InputStreamReader inputStream = new InputStreamReader(clientSocket.getInputStream());
-            in = new BufferedReader(inputStream);
-            while ((msg = in.readLine()) != null){
-                gui.display("Received: "+ msg);
-                handleCmd(msg);
-            }
+        	receivePacket = new DatagramPacket(received, received.length);
+            serverSocket.receive(receivePacket);
+            sentence = new String( receivePacket.getData());
+            gui.display("RECEIVED: " + sentence);
+            return sentence;
+        	
+//            InputStreamReader inputStream = new InputStreamReader(clientSocket.getInputStream());
+//            in = new BufferedReader(inputStream);
+//            while ((msg = in.readLine()) != null){
+//                gui.display("Received: "+ msg);
+//                handleCmd(msg);
+//            }
         } catch (IOException e){
             e.printStackTrace();
         }
         return cmd;
+    }
+    
+    public String send(String x) throws IOException {
+    	IPAddress = receivePacket.getAddress();
+        port = receivePacket.getPort();
+        sent = x.getBytes();
+        sendPacket = new DatagramPacket(sent, sent.length, IPAddress, port);
+        serverSocket.send(sendPacket);
+        return sentence;
     }
   
     // Execute any command sent from the web client
@@ -101,49 +122,49 @@ public class ClientConnection{
             try {
                 JT.send(x);
                 gui.display("Passed '" + x + "' to Arduino.");
-                //out.println("Passed '" + x + "' to Arduino.");
+                send("Passed '" + x + "' to Arduino.");
             } catch (Exception e){
                 gui.display("Failed to send command: " + x + " to Arduino.");
-                //out.println("Failed to send command: " + x + " to Arduino.");
+                send("Failed to send command: " + x + " to Arduino.");
                 System.exit(1);
             }
         } else if (x.equals("d")){
             //Close connection to client.
-            //out.println("Jetson will now disconnect...");
+            send("Jetson will now disconnect...");
             gui.display("Jetson will now disconnect...");
             server.stop();
             gui.display("Disconnected from web client.");
         } else if (x.equals("aqon")){
             //Turn on Data Acquisition mode
-            //out.println("Entering Acquisition mode...");
+            send("Entering Acquisition mode...");
             gui.display("Entering Acquisition mode...");
             execLinCmd(aqon);
             JT.setMode(true);
         } else if (x.equals("aqoff")){
             //Turn off Data Acquisition mode
-            //out.println("Stopping Acquisition mode...");
+        	send("Stopping Acquisition mode...");
             gui.display("Stopping Acquisition mode...");
             execLinCmd(aqoff);
             JT.setMode(false);
         } else if (x.equals("deton")){
             //Turn on Detection mode
-            //out.println("Entering Detection mode...");
+        	send("Entering Detection mode...");
             gui.display("Entering Detection mode...");
             execLinCmd(deton1);
             try{
                 gui.display("Sleeping for 10 seconds to allow YOLO to boot...");
-                //out.println("Sleeping for 10 seconds to allow YOLO to boot...");
+                send("Sleeping for 10 seconds to allow YOLO to boot...");
                 TimeUnit.SECONDS.sleep(10);
                 gui.display("Wait completed.");
-                //out.println("Wait completed.");
+                send("Wait completed.");
             } catch (Exception e){
                 gui.display("Error during sleep.");
-                //out.println("Error during sleep.");
+                send("Error during sleep.");
             }
             execLinCmd(deton2);
         } else if (x.equals("detoff")){
             //Turn off Detection mode
-            //out.println("Stopping Detection mode...");
+        	send("Stopping Detection mode...");
             gui.display("Stopping Detection mode...");
             execLinCmd(detoff1);
             execLinCmd(detoff2);
@@ -193,5 +214,8 @@ public class ClientConnection{
         detoff1= "killall -9 /home/nvidia/zed-yolo/zed_cpp_sample/build/darknet_zed";
         // Kills Gstreamer process
         detoff2= "killall -9 gstreamer";
+        
+        sent = new byte[1024];
+        received = new byte[1024];
     }
 }
