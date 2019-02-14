@@ -93,6 +93,7 @@ public class ClientConnection{
             serverSocket.receive(receivePacket);
             sentence = new String( receivePacket.getData());
             gui.display("RECEIVED: " + sentence);
+            handleCmd(sentence);
             return sentence;
         	
 //            InputStreamReader inputStream = new InputStreamReader(clientSocket.getInputStream());
