@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.util.concurrent.TimeUnit;
 
-public class ClientConnection{
+public class ClientConnection implements Runnable{
 
     private DatagramSocket serverSocket; //ServerSocket type for TCP, DatagramPacket for UDP
     private DatagramPacket receivePacket;
@@ -48,11 +48,10 @@ public class ClientConnection{
         
         // Initiate the server to connect to web client
         server.start(8080);
+        Thread h = new Thread(server);
+        h.start();
         
         // If connected, listen for input from web client
-        while (isConnected = true){
-            cmd = server.listen();
-        }
     }
 
     // Setup socket and wait for client
@@ -87,25 +86,25 @@ public class ClientConnection{
     }
 
     //Listen for input from web client
-    public String listen(){
-        try {
-        	receivePacket = new DatagramPacket(received, received.length);
-            serverSocket.receive(receivePacket);
-            sentence = new String( receivePacket.getData());
-            gui.display("RECEIVED: " + sentence);
-            handleCmd(sentence);
-            return sentence;
-        	
-//            InputStreamReader inputStream = new InputStreamReader(clientSocket.getInputStream());
-//            in = new BufferedReader(inputStream);
-//            while ((msg = in.readLine()) != null){
-//                gui.display("Received: "+ msg);
-//                handleCmd(msg);
-//            }
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-        return cmd;
+    public void run(){
+    	while (isConnected = true){
+	        try {
+	        	receivePacket = new DatagramPacket(received, received.length);
+	            serverSocket.receive(receivePacket);
+	            sentence = new String( receivePacket.getData());
+	            gui.display("RECEIVED: " + sentence);
+	            handleCmd(sentence);
+	            
+	//            InputStreamReader inputStream = new InputStreamReader(clientSocket.getInputStream());
+	//            in = new BufferedReader(inputStream);
+	//            while ((msg = in.readLine()) != null){
+	//                gui.display("Received: "+ msg);
+	//                handleCmd(msg);
+	//            }
+	        } catch (IOException e){
+	            e.printStackTrace();
+	        }
+    	}
     }
     
     public String send(String x) throws IOException {
