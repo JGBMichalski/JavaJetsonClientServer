@@ -129,25 +129,19 @@ public class ClientConnection{
                 send("Failed to send command: " + x + " to Arduino.");
                 System.exit(1);
             }
-        } else if (x.equals("d")){
-            //Close connection to client.
-            send("Jetson will now disconnect...");
-            gui.display("Jetson will now disconnect...");
-            server.stop();
-            gui.display("Disconnected from web client.");
-        } else if (x.equals("aqon")){
+        } else if (x.contains("aqon")){
             //Turn on Data Acquisition mode
             send("Entering Acquisition mode...");
             gui.display("Entering Acquisition mode...");
             execLinCmd(aqon);
             JT.setMode(true);
-        } else if (x.equals("aqoff")){
+        } else if (x.contains("aqoff")){
             //Turn off Data Acquisition mode
         	send("Stopping Acquisition mode...");
             gui.display("Stopping Acquisition mode...");
             execLinCmd(aqoff);
             JT.setMode(false);
-        } else if (x.equals("deton")){
+        } else if (x.contains("deton")){
             //Turn on Detection mode
         	send("Entering Detection mode...");
             gui.display("Entering Detection mode...");
@@ -163,17 +157,23 @@ public class ClientConnection{
                 send("Error during sleep.");
             }
             execLinCmd(deton2);
-        } else if (x.equals("detoff")){
+        } else if (x.contains("detoff")){
             //Turn off Detection mode
         	send("Stopping Detection mode...");
             gui.display("Stopping Detection mode...");
             execLinCmd(detoff1);
             execLinCmd(detoff2);
-        } else if (x.equals("senton")){
+        } else if (x.contains("senton")){
         	JT.setMode(true);
-        } else if (x.equals("sentoff")){
+        } else if (x.contains("sentoff")){
         	JT.setMode(false);
-        }  else {
+        } else if (x.contains("d")){
+            //Close connection to client.
+            send("Jetson will now disconnect...");
+            gui.display("Jetson will now disconnect...");
+            server.stop();
+            gui.display("Disconnected from web client.");
+        } else {
             //JT.setTime(Integer.parseInt(x));
         	gui.display("Invalid command: " + x);
         }
