@@ -11,7 +11,7 @@ public class ClientConnection implements Runnable{
     private InetAddress IPAddress;
     private String sentence;
     private DatagramPacket sendPacket ;
-    private int port;
+    private int port = 8080;
     private byte[] received;
     private byte[] sent;
     //private Socket clientSocket;
@@ -50,57 +50,36 @@ public class ClientConnection implements Runnable{
         server.start(8080);
         Thread h = new Thread(server);
         h.start();
-        
-        // If connected, listen for input from web client
     }
 
     // Setup socket and wait for client
     public void start(int port){
         try {
             gui.display("Setting up socket...");
-            serverSocket = new DatagramSocket(port);// for TCP: new ServerSocket(port);
+            serverSocket = new DatagramSocket(port);
             gui.display("Socket Setup...");
-            //clientSocket = serverSocket.accept();
             isConnected = true;
-
-            //gui.display("Connected to client");
-            //out = new PrintWriter(clientSocket.getOutputStream(), true);
         } catch (IOException e){
             gui.display("Could not setup socket. Please restart.");
         } 
-        //return clientSocket;
     }
 
     // Close all connections
     public void stop(){
-        //try {
-            //in.close();
-            //out.close();
-            //clientSocket.close();
-            serverSocket.close();
-        //} catch (IOException e){
-        //    e.printStackTrace();
-        //}
+    	isConnected = false;
+        serverSocket.close();
         gui.display("Server stopped.");
-        isConnected = false;
     }
 
     //Listen for input from web client
     public void run(){
-    	while (isConnected = true){
+    	while (isConnected){
 	        try {
 	        	receivePacket = new DatagramPacket(received, received.length);
 	            serverSocket.receive(receivePacket);
 	            sentence = new String( receivePacket.getData());
 	            gui.display("RECEIVED: " + sentence);
 	            handleCmd(sentence);
-	            
-	//            InputStreamReader inputStream = new InputStreamReader(clientSocket.getInputStream());
-	//            in = new BufferedReader(inputStream);
-	//            while ((msg = in.readLine()) != null){
-	//                gui.display("Received: "+ msg);
-	//                handleCmd(msg);
-	//            }
 	        } catch (IOException e){
 	            e.printStackTrace();
 	        }
@@ -164,13 +143,18 @@ public class ClientConnection implements Runnable{
             execLinCmd(detoff2);
         } else if (x.contains("senton")){
         	JT.setMode(true);
+        	send("Sentry Mode Enabled.");
+        	gui.display("Sentry Mode enabled.");
         } else if (x.contains("sentoff")){
         	JT.setMode(false);
+        	send("Sentry Mode Disabled.");
+        	gui.display("Sentry Mode disabled.");
         } else if (x.contains("d")){
             //Close connection to client.
             send("Jetson will now disconnect...");
             gui.display("Jetson will now disconnect...");
             server.stop();
+            server.start(8080);
             gui.display("Disconnected from web client.");
         } else {
             //JT.setTime(Integer.parseInt(x));
