@@ -41,7 +41,7 @@ public class ClientConnection implements Runnable{
         JT = new JetsonServer(gui);
         Thread t = new Thread(JT);
         t.start();
-        JT.connect();
+        //JT.connect();
         
         // Initiate the server to connect to web client
         server.start(8080);
@@ -102,10 +102,10 @@ public class ClientConnection implements Runnable{
             try {
                 JT.send(x);
                 gui.display("Passed '" + x + "' to Arduino.");
-                send("Passed '" + x + "' to Arduino.");
+                //send("Passed '" + x + "' to Arduino.");
             } catch (Exception e){
                 gui.display("Failed to send command: " + x + " to Arduino.");
-                send("Failed to send command: " + x + " to Arduino.");
+                //send("Failed to send command: " + x + " to Arduino.");
                 System.exit(1);
             }
         } else if (x.contains("aqon")){
@@ -144,11 +144,11 @@ public class ClientConnection implements Runnable{
             execLinCmd(detoff2);
         } else if (x.contains("senton")){
         	JT.setMode(true);
-        	send("Sentry Mode Enabled.");
+        	//send("Sentry Mode Enabled.");
         	gui.display("Sentry Mode enabled.");
         } else if (x.contains("sentoff")){
         	JT.setMode(false);
-        	send("Sentry Mode Disabled.");
+        	//send("Sentry Mode Disabled.");
         	gui.display("Sentry Mode disabled.");
         } else if (x.contains("d")){
             //Close connection to client.
