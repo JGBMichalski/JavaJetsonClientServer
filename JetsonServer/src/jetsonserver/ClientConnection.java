@@ -14,9 +14,6 @@ public class ClientConnection implements Runnable{
     private int port = 8080;
     private byte[] received;
     private byte[] sent;
-    //private Socket clientSocket;
-    //private PrintWriter out;
-    //private BufferedReader in;
     static boolean isConnected = false;
     static String cmd = "";
     static GUI gui;
@@ -87,12 +84,16 @@ public class ClientConnection implements Runnable{
     }
     
     public String send(String x) throws IOException {
-    	IPAddress = receivePacket.getAddress();
-        port = receivePacket.getPort();
-        sent = x.getBytes();
-        sendPacket = new DatagramPacket(sent, sent.length, IPAddress, port);
-        serverSocket.send(sendPacket);
-        return sentence;
+    	if (receivePacket.getAddress() != null) {
+	    	IPAddress = receivePacket.getAddress();
+	        port = receivePacket.getPort();
+	        sent = x.getBytes();
+	        sendPacket = new DatagramPacket(sent, sent.length, IPAddress, port);
+	        serverSocket.send(sendPacket);
+	        return sentence;
+    	} else {
+    		return null;
+    	}
     }
   
     // Execute any command sent from the web client
@@ -177,11 +178,17 @@ public class ClientConnection implements Runnable{
     // Load the variables for executing commands
     private void loadVariables(){
         // Launches Gstreamer and streams to browser on localhost
-        aqon = "gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw, width=3840,"
-        		+ " height=1080 ! videocrop top=0 left=0 right=1920 bottom=0 ! "
-        		+ "videoconvert ! videoscale ! video/x-raw,width=720,height=360 ! "
-        		+ "clockoverlay shaded-background=true font-desc=\"Sans 24\" ! "
-        		+ "theoraenc ! oggmux ! tcpserversink host=127.0.0.1 port=5000";
+        aqon = "gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw, width=3840, "
+        		+ "height=1080, framerate=30/1 ! videocrop top=0 left=0 right=1920 "
+        		+ "bottom=0 ! videoconvert ! videoscale ! video/x-raw,width=360,height=240 "
+        		+ "! clockoverlay shaded-background=true font-desc=\"Sans 24\" ! "
+        		+ "vp8enc target-bitrate=2500000 ! webmmux streamable=true ! queue "
+        		+ "! tcpserversink host=127.0.0.1 port=5000";
+        		//"gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw, width=3840,"
+        		//+ " height=1080 ! videocrop top=0 left=0 right=1920 bottom=0 ! "
+        		//+ "videoconvert ! videoscale ! video/x-raw,width=720,height=360 ! "
+        		//+ "clockoverlay shaded-background=true font-desc=\"Sans 24\" ! "
+        		//+ "theoraenc ! oggmux ! tcpserversink host=127.0.0.1 port=5000";
         // Kills Gstreamer process
         aqoff = "killall -9 gstreamer";
         // Launches YOLOv3
@@ -190,10 +197,15 @@ public class ClientConnection implements Runnable{
                     + "zed-yolo/libdarknet/cfg/yolov3-tiny.cfg /home/nvidia/zed-yolo/"
                     + "libdarknet/yolov3-tiny.weights";
         // Launches Gstreamer to stream YOLO to browser
-        deton2 = "gst-launch-1.0  ximagesrc xname=\"ZED\" use-damage=0 ! videoconvert"
-        		+ " ! videoscale ! video/x-raw,width=720,height=360 ! clockoverlay "
-        		+ "shaded-background=true font-desc=\"Sans 24\" ! theoraenc ! oggmux"
-        		+ " ! tcpserversink host=127.0.0.1 port=5000";
+        deton2 = "gst-launch-1.0 ximagesrc xname=\"ZED\" use-damage=0 !"
+        		+ " videoconvert ! videoscale ! video/x-raw,width=360,height=240 "
+        		+ "! clockoverlay shaded-background=true font-desc=\"Sans 24\" ! "
+        		+ "vp8enc target-bitrate=2500000 ! webmmux streamable=true ! queue "
+        		+ "! tcpserversink host=127.0.0.1 port=5000";
+        		//"gst-launch-1.0  ximagesrc xname=\"ZED\" use-damage=0 ! videoconvert"
+        		//+ " ! videoscale ! video/x-raw,width=720,height=360 ! clockoverlay "
+        		//+ "shaded-background=true font-desc=\"Sans 24\" ! theoraenc ! oggmux"
+        		//+ " ! tcpserversink host=127.0.0.1 port=5000";
         // Kills YOLOv3 process
         detoff1= "killall -9 /home/nvidia/zed-yolo/zed_cpp_sample/build/darknet_zed";
         // Kills Gstreamer process
