@@ -190,7 +190,7 @@ public class ClientConnection implements Runnable{
         		//+ "clockoverlay shaded-background=true font-desc=\"Sans 24\" ! "
         		//+ "theoraenc ! oggmux ! tcpserversink host=127.0.0.1 port=5000";
         // Kills Gstreamer process
-        aqoff = "killall -9 gstreamer";
+        aqoff = "killall -9 gst-launch-1.0";
         // Launches YOLOv3
         deton1 = "/home/nvidia/zed-yolo/zed_cpp_sample/build/darknet_zed "
                     + "/home/nvidia/zed-yolo/libdarknet/data/coco.names /home/nvidia/"
@@ -209,7 +209,7 @@ public class ClientConnection implements Runnable{
         // Kills YOLOv3 process
         detoff1= "killall -9 /home/nvidia/zed-yolo/zed_cpp_sample/build/darknet_zed";
         // Kills Gstreamer process
-        detoff2= "killall -9 gstreamer";
+        detoff2= "killall -9 gst-launch-1.0";
         
         sent = new byte[1024];
         received = new byte[1024];
