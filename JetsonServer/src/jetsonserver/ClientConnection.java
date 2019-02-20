@@ -122,23 +122,23 @@ public class ClientConnection implements Runnable{
             JT.setMode(false);
         } else if (x.contains("deton")){
             //Turn on Detection mode
-        	send("Entering Detection mode...");
+        	//send("Entering Detection mode...");
             gui.display("Entering Detection mode...");
             execLinCmd(deton1);
             try{
                 gui.display("Sleeping for 10 seconds to allow YOLO to boot...");
-                send("Sleeping for 10 seconds to allow YOLO to boot...");
+                //send("Sleeping for 10 seconds to allow YOLO to boot...");
                 TimeUnit.SECONDS.sleep(10);
                 gui.display("Wait completed.");
-                send("Wait completed.");
+                //send("Wait completed.");
             } catch (Exception e){
                 gui.display("Error during sleep.");
-                send("Error during sleep.");
+                //send("Error during sleep.");
             }
             execLinCmd(deton2);
         } else if (x.contains("detoff")){
             //Turn off Detection mode
-        	send("Stopping Detection mode...");
+        	//send("Stopping Detection mode...");
             gui.display("Stopping Detection mode...");
             execLinCmd(detoff1);
             execLinCmd(detoff2);
