@@ -183,7 +183,7 @@ public class ClientConnection implements Runnable{
         		+ "bottom=0 ! videoconvert ! videoscale ! video/x-raw,width=360,height=240 "
         		+ "! clockoverlay shaded-background=true font-desc=\"Sans 24\" ! "
         		+ "vp8enc target-bitrate=2500000 ! webmmux streamable=true ! queue "
-        		+ "! tcpserversink host=127.0.0.1 port=55000";
+        		+ "! tcpserversink host=127.0.0.1 port=25505";
         		//"gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw, width=3840,"
         		//+ " height=1080 ! videocrop top=0 left=0 right=1920 bottom=0 ! "
         		//+ "videoconvert ! videoscale ! video/x-raw,width=720,height=360 ! "
@@ -201,7 +201,7 @@ public class ClientConnection implements Runnable{
         		+ " videoconvert ! videoscale ! video/x-raw,width=360,height=240 "
         		+ "! clockoverlay shaded-background=true font-desc=\"Sans 24\" ! "
         		+ "vp8enc target-bitrate=2500000 ! webmmux streamable=true ! queue "
-        		+ "! tcpserversink host=127.0.0.1 port=55000";
+        		+ "! tcpserversink host=127.0.0.1 port=25505";
         		//"gst-launch-1.0  ximagesrc xname=\"ZED\" use-damage=0 ! videoconvert"
         		//+ " ! videoscale ! video/x-raw,width=720,height=360 ! clockoverlay "
         		//+ "shaded-background=true font-desc=\"Sans 24\" ! theoraenc ! oggmux"
