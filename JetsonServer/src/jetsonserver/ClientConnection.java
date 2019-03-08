@@ -197,11 +197,20 @@ public class ClientConnection implements Runnable{
                     + "zed-yolo/libdarknet/cfg/yolov3-tiny.cfg /home/nvidia/zed-yolo/"
                     + "libdarknet/yolov3-tiny.weights";
         // Launches Gstreamer to stream YOLO to browser
-        deton2 = "gst-launch-1.0 ximagesrc xname=\"ZED\" use-damage=0 !"
-        		+ " videoconvert ! videoscale ! video/x-raw,width=360,height=240 "
-        		+ "! clockoverlay shaded-background=true font-desc=\"Sans 24\" ! "
-        		+ "vp8enc target-bitrate=2500000 ! webmmux streamable=true ! queue "
-        		+ "! tcpserversink host=127.0.0.1 port=25505";
+        deton2 = "gst-launch-1.0  ximagesrc xname=\"ZED\" use-damage=0 ! videoconvert "
+        		+ "! videoscale ! video/x-raw,width=720,height=360,format=I420 ! clockoverlay "
+        		+ "shaded-background=true font-desc=\"Sans 24\" ! queue ! jpegenc ! tee name=t "
+        		+ "! queue ! rtpjpegpay ! udpsink host=localhost port=5000 t.! queue ! avimux !"
+        		+ " filesink location=JPEGVIDEO.avi -e";
+        		
+        		//V2
+        		//"gst-launch-1.0 ximagesrc xname=\"ZED\" use-damage=0 !"
+        		//+ " videoconvert ! videoscale ! video/x-raw,width=360,height=240 "
+        		//+ "! clockoverlay shaded-background=true font-desc=\"Sans 24\" ! "
+        		//+ "vp8enc target-bitrate=2500000 ! webmmux streamable=true ! queue "
+        		//+ "! tcpserversink host=127.0.0.1 port=25505";
+        
+        		//V!
         		//"gst-launch-1.0  ximagesrc xname=\"ZED\" use-damage=0 ! videoconvert"
         		//+ " ! videoscale ! video/x-raw,width=720,height=360 ! clockoverlay "
         		//+ "shaded-background=true font-desc=\"Sans 24\" ! theoraenc ! oggmux"
