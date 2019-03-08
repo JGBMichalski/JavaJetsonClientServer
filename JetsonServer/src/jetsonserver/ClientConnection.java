@@ -200,7 +200,7 @@ public class ClientConnection implements Runnable{
         deton2 = "gst-launch-1.0  ximagesrc xname=\"ZED\" use-damage=0 ! videoconvert "
         		+ "! videoscale ! video/x-raw,width=720,height=360,format=I420 ! clockoverlay "
         		+ "shaded-background=true font-desc=\"Sans 24\" ! queue ! jpegenc ! tee name=t "
-        		+ "! queue ! rtpjpegpay ! udpsink host=localhost port=5000 t.! queue ! avimux !"
+        		+ "! queue ! rtpjpegpay ! tcpserversink host=localhost port=5000 t.! queue ! avimux !"
         		+ " filesink location=JPEGVIDEO.avi -e";
         		
         		//V2
