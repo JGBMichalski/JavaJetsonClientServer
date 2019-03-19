@@ -102,10 +102,10 @@ public class ClientConnection implements Runnable{
             try {
                 JT.send(x);
                 gui.display("Passed '" + x + "' to Arduino.");
-                //send("Passed '" + x + "' to Arduino.");
+                send("Passed '" + x + "' to Arduino.");
             } catch (Exception e){
                 gui.display("Failed to send command: " + x + " to Arduino.");
-                //send("Failed to send command: " + x + " to Arduino.");
+                send("Failed to send command: " + x + " to Arduino.");
                 System.exit(1);
             }
         } else if (x.contains("aqon")){
@@ -122,33 +122,33 @@ public class ClientConnection implements Runnable{
             JT.setMode(false);
         } else if (x.contains("deton")){
             //Turn on Detection mode
-        	//send("Entering Detection mode...");
+        	send("Entering Detection mode...");
             gui.display("Entering Detection mode...");
             execLinCmd(deton1);
             try{
                 gui.display("Sleeping for 10 seconds to allow YOLO to boot...");
-                //send("Sleeping for 10 seconds to allow YOLO to boot...");
+                send("Sleeping for 10 seconds to allow YOLO to boot...");
                 TimeUnit.SECONDS.sleep(10);
                 gui.display("Wait completed.");
-                //send("Wait completed.");
+                send("Wait completed.");
             } catch (Exception e){
                 gui.display("Error during sleep.");
-                //send("Error during sleep.");
+                send("Error during sleep.");
             }
             execLinCmd(deton2);
         } else if (x.contains("detoff")){
             //Turn off Detection mode
-        	//send("Stopping Detection mode...");
+        	send("Stopping Detection mode...");
             gui.display("Stopping Detection mode...");
             execLinCmd(detoff1);
             execLinCmd(detoff2);
         } else if (x.contains("senton")){
         	JT.setMode(true);
-        	//send("Sentry Mode Enabled.");
+        	send("Sentry Mode Enabled.");
         	gui.display("Sentry Mode enabled.");
         } else if (x.contains("sentoff")){
         	JT.setMode(false);
-        	//send("Sentry Mode Disabled.");
+        	send("Sentry Mode Disabled.");
         	gui.display("Sentry Mode disabled.");
         } else if (x.contains("d")){
             //Close connection to client.
@@ -161,6 +161,7 @@ public class ClientConnection implements Runnable{
             //JT.setTime(Integer.parseInt(x));
         	gui.display("Invalid command: " + x);
         }
+        x = "";
     }
     
     // Execute any Linux command sent by the web server
@@ -178,12 +179,12 @@ public class ClientConnection implements Runnable{
     // Load the variables for executing commands
     private void loadVariables(){
         // Launches Gstreamer and streams to browser on localhost
-        aqon = "gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw, width=3840, "
-        		+ "height=1080, framerate=30/1 ! videocrop top=0 left=0 right=1920 "
-        		+ "bottom=0 ! videoconvert ! videoscale ! video/x-raw,width=360,height=240 "
-        		+ "! clockoverlay shaded-background=true font-desc=\"Sans 24\" ! "
-        		+ "vp8enc target-bitrate=2500000 ! webmmux streamable=true ! queue "
-        		+ "! tcpserversink host=127.0.0.1 port=25505";
+        aqon = "gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw, width=3840, height=1080, "
+        		+ "framerate=30/1 ! videocrop top=0 left=0 right=1920 bottom=0 ! videoconvert ! "
+        		+ "videoscale ! video/x-raw, width=480, height=240, format=I420 ! clockoverlay "
+        		+ "shaded-background=true font-desc=\"Sans 24\" ! vp8enc target-bitrate=2500000 ! "
+        		+ "tee name=branch ! queue ! rtvpvp8pay ! udpsink host=192.168.1.100 port=5000 branch."
+        		+ " ! queue ! matroskamux ! filesink location=mkvTesting.mkv";
         		//"gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw, width=3840,"
         		//+ " height=1080 ! videocrop top=0 left=0 right=1920 bottom=0 ! "
         		//+ "videoconvert ! videoscale ! video/x-raw,width=720,height=360 ! "
@@ -197,11 +198,10 @@ public class ClientConnection implements Runnable{
                     + "zed-yolo/libdarknet/cfg/yolov3-tiny.cfg /home/nvidia/zed-yolo/"
                     + "libdarknet/yolov3-tiny.weights";
         // Launches Gstreamer to stream YOLO to browser
-        deton2 = "gst-launch-1.0  ximagesrc xname=\"ZED\" use-damage=0 ! videoconvert "
-        		+ "! videoscale ! video/x-raw,width=720,height=360,format=I420 ! clockoverlay "
-        		+ "shaded-background=true font-desc=\"Sans 24\" ! queue ! jpegenc ! tee name=t "
-        		+ "! queue ! rtpjpegpay ! tcpserversink host=localhost port=5000 t.! queue ! avimux !"
-        		+ " filesink location=JPEGVIDEO.avi -e";
+        deton2 = "gst-launch-1.0  ximagesrc xname=\"ZED\" use-damage=0 ! videoconvert ! "
+        		+ "videoscale ! video/x-raw,width=480,height=240,format=I420 ! clockoverlay"
+        		+ " shaded-background=true font-desc=\"Sans 24\" ! vp8enc target-bitrate=2500000"
+        		+ " ! rtvpvp8pay ! udpsink host=192.168.1.100 port=5000 ";
         		
         		//V2
         		//"gst-launch-1.0 ximagesrc xname=\"ZED\" use-damage=0 !"
