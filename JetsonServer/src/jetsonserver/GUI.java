@@ -112,7 +112,7 @@ public class GUI extends javax.swing.JFrame {
         if (y.isEmpty()){
             y = x;
         } else {
-            y = y + "\n\n" + x;
+            y = y + "\n" + x;
         }
         TextBox1.setText(y);
     }
