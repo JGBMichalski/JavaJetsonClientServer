@@ -158,6 +158,14 @@ public class ClientConnection implements Runnable{
             server.stop();
             gui.display("Disconnected from web client.");
             server.start(8080);
+        } if (x.contains("s+")){
+            try {
+                JT.send(x);
+                gui.display("Changed speed: '" + x + "' sent to Arduino.");
+            } catch (Exception e){
+                gui.display("Failed to send command: " + x + " to Arduino.");
+                System.exit(1);
+            }
         } else {
             //JT.setTime(Integer.parseInt(x));
         	gui.display("Invalid command: " + x);
