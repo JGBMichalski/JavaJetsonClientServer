@@ -158,7 +158,7 @@ public class ClientConnection implements Runnable{
             server.stop();
             gui.display("Disconnected from web client.");
             server.start(8080);
-        } if (x.contains("s+")){
+        } else if (x.contains("s+")){
             try {
                 JT.send(x);
                 gui.display("Changed speed: '" + x + "' sent to Arduino.");
@@ -192,7 +192,7 @@ public class ClientConnection implements Runnable{
         		+ "bottom=0 ! videoconvert ! videoscale ! video/x-raw, width=480, "
         		+ "height=240, format=I420 ! clockoverlay shaded-background=true "
         		+ "font-desc=\"Sans 24\" ! jpegenc ! tee name=t ! queue ! rtpjpegpay "
-        		+ "! udpsink host=192.168.1.100 port=5000 -e t. ! queue ! avimux ! "
+        		+ "! udpsink host=192.168.1.102 port=5000 -e t. ! queue ! avimux ! "
         		+ "filesink location=JPEGVideo.avi -e";
         		//"gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw, width=3840,"
         		//+ " height=1080 ! videocrop top=0 left=0 right=1920 bottom=0 ! "
@@ -210,7 +210,7 @@ public class ClientConnection implements Runnable{
         deton2 = "gst-launch-1.0  ximagesrc xname=\"ZED\" use-damage=0 ! videoconvert !"
         		+ " videoscale ! video/x-raw,width=480,height=240,format=I420 ! "
         		+ "clockoverlay shaded-background=true font-desc=\"Sans 24\" ! jpegenc"
-        		+ " ! rtpjpegpay ! udpsink host=192.168.1.100 port=5000 -e ";
+        		+ " ! rtpjpegpay ! udpsink host=192.168.1.102 port=5000 -e";
         		
         		//V2
         		//"gst-launch-1.0 ximagesrc xname=\"ZED\" use-damage=0 !"
