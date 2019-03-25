@@ -13,7 +13,7 @@ public class JetsonServer implements Runnable {
      
      public JetsonServer(GUI x){
          gui = x;
-         delay = 3000;
+         delay = 6000;
      }
 
     public void send(String x) throws IOException {
@@ -51,7 +51,7 @@ public class JetsonServer implements Runnable {
                     send("x+500");
                     Thread.sleep(delay);
                     send("x-999");
-                    Thread.sleep(delay);
+                    Thread.sleep(delay*2);
                     send("x+500");
                     Thread.sleep(delay);
                 } catch (Exception e){}
